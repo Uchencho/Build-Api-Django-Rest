@@ -2,18 +2,18 @@ from django.urls import path, include
 from django.conf.urls import url
 from .views import (
     StatusAPIView, 
-    StatusCreateAPIView,
+    #StatusCreateAPIView,
     StatusDetailAPIView,
-    StatusUpdateAPIView,
-    StatusDeleteAPIView,
+    #StatusUpdateAPIView,
+    #StatusDeleteAPIView,
     )
 
 urlpatterns = [
     path('', StatusAPIView.as_view()),
-    path('create/', StatusCreateAPIView.as_view()),
+    #path('create/', StatusCreateAPIView.as_view()),
     url(r'^(?P<pk>\d+)/$', StatusDetailAPIView.as_view()),
-    url(r'^(?P<pk>\d+)/update/$', StatusUpdateAPIView.as_view()),
-    url(r'^(?P<pk>\d+)/delete/$', StatusDeleteAPIView.as_view()),
+    #url(r'^(?P<pk>\d+)/update/$', StatusUpdateAPIView.as_view()),
+    #url(r'^(?P<pk>\d+)/delete/$', StatusDeleteAPIView.as_view()),
 ]
 
 # /api/status/ --> List

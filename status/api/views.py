@@ -1,6 +1,6 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework import generics
+from rest_framework import generics, mixins
 
 from .serializers import StatusSerializer
 from status.models import Status
@@ -14,24 +14,45 @@ class StatusListSearchAPIView(APIView):
         serializer = StatusSerializer(qs, many=True)
         return Response(serializer.data)
 
-class StatusAPIView(generics.ListAPIView):
+#Explaining Mixins
+# CreateModelMixin ---> POST method
+# UpdateModelMixin ---> PUT method
+# DestroyModelMixin ---> DELETE method
+
+class StatusAPIView(mixins.CreateModelMixin ,generics.ListAPIView): #Create and List
+    #This will enable a list view
     permission_classes          = []
     authentication_classes      = []
     serializer_class            = StatusSerializer
     queryset                    = Status.objects.all()
 
+    #Inheriting from mixin class, this will enable a create function
+    def post(self, request, *args, **kwargs):
+        return self.create(request, *args, **kwargs)
+
+'''
+#Because of the Create model mixin above, this has been rendered useless
 class StatusCreateAPIView(generics.CreateAPIView):
     permission_classes          = []
     authentication_classes      = []
     serializer_class            = StatusSerializer
     queryset                    = Status.objects.all()
+'''
 
-class StatusDetailAPIView(generics.RetrieveAPIView):
+class StatusDetailAPIView(mixins.DestroyModelMixin, mixins.UpdateModelMixin, generics.RetrieveAPIView):
     permission_classes          = []
     authentication_classes      = []
     serializer_class            = StatusSerializer
     queryset                    = Status.objects.all()
 
+    def put(self, request, *args, **kwargs):
+        return self.update(request, *args, **kwargs)
+
+    def delete(self, request, *args, **kwargs):
+        return self.destroy(request, *args, **kwargs)
+
+'''
+#Because of the Update and Destroy mixins above, these have been rendered useless
 class StatusUpdateAPIView(generics.UpdateAPIView):
     permission_classes          = []
     authentication_classes      = []
@@ -43,3 +64,5 @@ class StatusDeleteAPIView(generics.DestroyAPIView):
     authentication_classes      = []
     serializer_class            = StatusSerializer
     queryset                    = Status.objects.all()
+
+'''
