@@ -1,7 +1,7 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework import generics, mixins
-
+from rest_framework import generics, mixins, permissions
+from rest_framework.authentication import SessionAuthentication
 from .serializers import StatusSerializer
 from status.models import Status
 
@@ -21,14 +21,18 @@ class StatusListSearchAPIView(APIView):
 
 class StatusAPIView(mixins.CreateModelMixin ,generics.ListAPIView): #Create and List
     #This will enable a list view
-    permission_classes          = []
-    authentication_classes      = []
+    permission_classes          = [permissions.IsAuthenticated]
+    authentication_classes      = [SessionAuthentication]
     serializer_class            = StatusSerializer
     queryset                    = Status.objects.all()
 
     #Inheriting from mixin class, this will enable a create function
     def post(self, request, *args, **kwargs):
         return self.create(request, *args, **kwargs)
+
+    def perform_create(self, serializer):
+        #This is used to override an nbuilt function which enables user which is a required field be read only
+        serializer.save(user=self.request.user)
 
 '''
 #Because of the Create model mixin above, this has been rendered useless
@@ -40,8 +44,8 @@ class StatusCreateAPIView(generics.CreateAPIView):
 '''
 
 class StatusDetailAPIView(mixins.DestroyModelMixin, mixins.UpdateModelMixin, generics.RetrieveAPIView):
-    permission_classes          = []
-    authentication_classes      = []
+    permission_classes          = [permissions.IsAuthenticated]
+    authentication_classes      = [SessionAuthentication]
     serializer_class            = StatusSerializer
     queryset                    = Status.objects.all()
 
