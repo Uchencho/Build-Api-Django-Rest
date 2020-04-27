@@ -34,6 +34,14 @@ class StatusAPIView(mixins.CreateModelMixin ,generics.ListAPIView): #Create and 
         #This is used to override an nbuilt function which enables user which is a required field be read only
         serializer.save(user=self.request.user)
 
+    #This enables search --> seraching for testing  http://127.0.0.1:8000/api/status/?q=Testing
+    def get_queryset(self):
+        qs = Status.objects.all()
+        query = self.request.GET.get('q')
+        if query is not None:
+            qs = qs.filter(content__icontains=query)
+        return qs
+
 '''
 #Because of the Create model mixin above, this has been rendered useless
 class StatusCreateAPIView(generics.CreateAPIView):
