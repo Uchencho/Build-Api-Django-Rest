@@ -21,8 +21,8 @@ class StatusListSearchAPIView(APIView):
 
 class StatusAPIView(mixins.CreateModelMixin ,generics.ListAPIView): #Create and List
     #This will enable a list view
-    permission_classes          = [permissions.IsAuthenticated]
-    authentication_classes      = [SessionAuthentication]
+    #permission_classes          = [permissions.IsAuthenticated]
+    #authentication_classes      = [SessionAuthentication]
     serializer_class            = StatusSerializer
     queryset                    = Status.objects.all()
 
@@ -44,8 +44,8 @@ class StatusCreateAPIView(generics.CreateAPIView):
 '''
 
 class StatusDetailAPIView(mixins.DestroyModelMixin, mixins.UpdateModelMixin, generics.RetrieveAPIView):
-    permission_classes          = [permissions.IsAuthenticated]
-    authentication_classes      = [SessionAuthentication]
+    #permission_classes          = [permissions.IsAuthenticated]
+    #authentication_classes      = [SessionAuthentication]
     serializer_class            = StatusSerializer
     queryset                    = Status.objects.all()
 
