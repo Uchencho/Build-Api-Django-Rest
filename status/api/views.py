@@ -1,9 +1,12 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework import generics, mixins, permissions
+from rest_framework import generics, mixins, permissions, pagination
 from rest_framework.authentication import SessionAuthentication
 from .serializers import StatusSerializer
 from status.models import Status
+
+class TestAPIPagination(pagination.PageNumberPagination):
+    page_size = 5
 
 class StatusListSearchAPIView(APIView):
     permission_classes          = []
@@ -25,6 +28,7 @@ class StatusAPIView(mixins.CreateModelMixin ,generics.ListAPIView): #Create and 
     #authentication_classes      = [SessionAuthentication]
     serializer_class            = StatusSerializer
     queryset                    = Status.objects.all()
+    pagination_class            = TestAPIPagination
 
     #Inheriting from mixin class, this will enable a create function
     def post(self, request, *args, **kwargs):
