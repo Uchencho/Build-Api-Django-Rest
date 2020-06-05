@@ -23,6 +23,9 @@ class StatusListSearchAPIView(APIView):
 # DestroyModelMixin ---> DELETE method
 
 class StatusAPIView(mixins.CreateModelMixin ,generics.ListAPIView): #Create and List
+    """
+    Lists the available Statuses
+    """
     #This will enable a list view
     #permission_classes          = [permissions.IsAuthenticated]
     #authentication_classes      = [SessionAuthentication]
@@ -32,6 +35,9 @@ class StatusAPIView(mixins.CreateModelMixin ,generics.ListAPIView): #Create and 
 
     #Inheriting from mixin class, this will enable a create function
     def post(self, request, *args, **kwargs):
+        """
+        Allows a user create a status
+        """
         return self.create(request, *args, **kwargs)
 
     def perform_create(self, serializer):
@@ -56,15 +62,24 @@ class StatusCreateAPIView(generics.CreateAPIView):
 '''
 
 class StatusDetailAPIView(mixins.DestroyModelMixin, mixins.UpdateModelMixin, generics.RetrieveAPIView):
+    """
+    Allows a user see a status in Details
+    """
     #permission_classes          = [permissions.IsAuthenticated]
     #authentication_classes      = [SessionAuthentication]
     serializer_class            = StatusSerializer
     queryset                    = Status.objects.all()
 
     def put(self, request, *args, **kwargs):
+        """
+        Allows a edit a status
+        """
         return self.update(request, *args, **kwargs)
 
     def delete(self, request, *args, **kwargs):
+        """
+        Allows a user delete a status
+        """
         return self.destroy(request, *args, **kwargs)
 
 '''
